@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานปริมาณขยะ Mahidol Open House</title>
+    <!-- Tailwind CSS สำหรับการจัดการ Layout และความสวยงาม -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js สำหรับวาดกราฟ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Prompt', sans-serif; background-color: #f3f4f6; }
+        .table-header { background-color: #e5e7eb; font-weight: 600; text-align: center; }
+        .day1-bg { background-color: #d1fae5; }
+        .day2-bg { background-color: #ede9fe; }
+        th, td { border: 1px solid #d1d5db; padding: 0.75rem; text-align: center; vertical-align: middle; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- Header -->
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-bold text-blue-900 mb-2">สรุปปริมาณขยะ Mahidol Open House</h1>
+            <p class="text-lg text-gray-600">ข้อมูลเปรียบเทียบปี 2024 - 2026 และรายละเอียดขยะปีล่าสุด</p>
+        </header>
+
+        <!-- Key Insights Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+                <h3 class="text-sm font-semibold text-gray-500 mb-1">ยอดคนเข้างานรวมปีล่าสุด (2026)</h3>
+                <p class="text-3xl font-bold text-gray-800">35,230 <span class="text-sm font-normal text-red-500">▼ ลดลงจากปีก่อน</span></p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500">
+                <h3 class="text-sm font-semibold text-gray-500 mb-1">ปริมาณขยะรวมปีล่าสุด (2026)</h3>
+                <p class="text-3xl font-bold text-gray-800">16,966 <span class="text-sm font-normal text-red-500">▲ เพิ่มขึ้นอย่างมาก</span></p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
+                <h3 class="text-sm font-semibold text-gray-500 mb-1">ขยะที่ไม่ทราบที่มาที่ไป (2026)</h3>
+                <p class="text-3xl font-bold text-red-600">7,249 <span class="text-sm font-normal text-gray-500">ชิ้น/หน่วย</span></p>
+                <p class="text-xs text-gray-500 mt-1">*เป็นประเด็นที่ต้องเฝ้าระวังสูงสุด</p>
+            </div>
+        </div>
+
+        <!-- 1. ภาพรวมขยะ 2024-2026 (ตารางแรก) -->
+        <div class="bg-white rounded-lg shadow overflow-hidden mb-10">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800">ภาพรวมปริมาณขยะ (ปี 2024 - 2026)</h2>
+            </div>
+            <div class="overflow-x-auto p-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="bg-gray-100">วันที่ / ปี</th>
+                            <th colspan="6" class="day1-bg">ข้อมูลวันที่ 1</th>
+                            <th colspan="6" class="day2-bg">ข้อมูลวันที่ 2</th>
+                            <th rowspan="2" class="bg-blue-200 text-blue-900 font-bold text-base">รวมปริมาณ<br>ขยะ 2 วัน</th>
+                        </tr>
+                        <tr>
+                            <th class="day1-bg">วันที่ 1<br>(รวม)</th>
+                            <th class="day1-bg">ปริมาณที่บันทึกได้<br>จากส่วนงาน</th>
+                            <th class="day1-bg">ไม่ทราบ<br>ที่มาที่ไป</th>
+                            <th class="day1-bg">ขยะที่ทำ<br>ประโยชน์</th>
+                            <th class="day1-bg font-bold">รวมขยะ<br>ทั้งหมด</th>
+                            <th class="day1-bg font-bold text-blue-700">คนเข้างาน</th>
+                            <th class="day2-bg">วันที่ 2<br>(รวม)</th>
+                            <th class="day2-bg">ปริมาณที่บันทึกได้<br>จากส่วนงาน</th>
+                            <th class="day2-bg">ไม่ทราบ<br>ที่มาที่ไป</th>
+                            <th class="day2-bg">ขยะที่ทำ<br>ประโยชน์</th>
+                            <th class="day2-bg font-bold">รวมขยะ<br>ทั้งหมด</th>
+                            <th class="day2-bg font-bold text-blue-700">คนเข้างาน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="font-semibold text-center bg-white">2024<br><span class="text-xs font-normal text-gray-500">(7-8/09/67)</span></td>
+                            <td class="bg-orange-100">5,180</td>
+                            <td class="day1-bg text-gray-400">-</td><td class="day1-bg text-gray-400">-</td><td class="bg-orange-100 text-gray-400">-</td>
+                            <td class="day1-bg font-semibold">5,180</td><td class="day1-bg font-semibold text-blue-600">31,914</td>
+                            <td class="bg-orange-100">8,510</td>
+                            <td class="day2-bg text-gray-400">-</td><td class="day2-bg text-gray-400">-</td><td class="bg-orange-100 text-gray-400">-</td>
+                            <td class="day2-bg font-semibold">8,510</td><td class="day2-bg font-semibold text-blue-600">16,884</td>
+                            <td class="bg-blue-100 font-bold text-lg text-blue-900">13,690</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="font-semibold text-center bg-white">2025<br><span class="text-xs font-normal text-gray-500">(6-7/09/68)</span></td>
+                            <td class="bg-orange-100">3,540</td>
+                            <td class="day1-bg">2,623</td><td class="day1-bg text-red-600 font-bold">917</td><td class="bg-orange-100">1,915</td>
+                            <td class="day1-bg font-semibold">5,455</td><td class="day1-bg font-semibold text-blue-600">26,221</td>
+                            <td class="bg-orange-100">3,300</td>
+                            <td class="day2-bg">2,650</td><td class="day2-bg text-red-600 font-bold">650</td><td class="bg-orange-100">1,500</td>
+                            <td class="day2-bg font-semibold">4,800</td><td class="day2-bg font-semibold text-blue-600">11,337</td>
+                            <td class="bg-blue-100 font-bold text-lg text-blue-900">10,255</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition bg-yellow-50">
+                            <td class="font-semibold text-center bg-white">2026<br><span class="text-xs font-normal text-gray-500">(5-6/09/69)</span></td>
+                            <td class="bg-orange-100">3,670</td>
+                            <td class="day1-bg">1,235</td><td class="day1-bg text-red-600 font-bold">2,435</td><td class="bg-orange-100">4,328</td>
+                            <td class="day1-bg font-semibold">7,998</td><td class="day1-bg font-semibold text-blue-600">25,636</td>
+                            <td class="bg-orange-100">5,860</td>
+                            <td class="day2-bg">1,046</td><td class="day2-bg text-red-600 font-bold">4,814</td><td class="bg-orange-100">3,108</td>
+                            <td class="day2-bg font-semibold">8,968</td><td class="day2-bg font-semibold text-blue-600">9,594</td>
+                            <td class="bg-blue-100 font-bold text-lg text-blue-900">16,966</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Charts Section 1 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-4 text-center">แนวโน้มปริมาณขยะรวม (2 วัน) เทียบกับผู้เข้างาน</h2>
+                <canvas id="trendChart" height="250"></canvas>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-4 text-center">สัดส่วนขยะที่ไม่ทราบที่มาที่ไป (ปี 2025 vs 2026)</h2>
+                <canvas id="unknownWasteChart" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- 2. ตารางรายละเอียดประเภทขยะปี 2026 (ตารางใหม่) -->
+        <div class="bg-white rounded-lg shadow overflow-hidden mb-10 border-t-4 border-indigo-500">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800">รายละเอียดประเภทขยะ แยกรายวัน ประจำปี 2026</h2>
+                <p class="text-sm text-gray-500 mt-1">ข้อมูลวันที่ 5 และ 6 กันยายน 2569</p>
+            </div>
+            <div class="overflow-x-auto p-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                    <thead>
+                        <tr class="bg-indigo-100 text-indigo-900">
+                            <th class="p-2 border font-bold">วันที่จัดกิจกรรม</th>
+                            <th class="p-2 border">PET</th>
+                            <th class="p-2 border">แก้ว/กระป๋อง</th>
+                            <th class="p-2 border">หลอด</th>
+                            <th class="p-2 border">ฝาขวด</th>
+                            <th class="p-2 border">กระดาษ/อื่นๆ</th>
+                            <th class="p-2 border">ภาชนะพลาสติก</th>
+                            <th class="p-2 border">ไม้เสียบ</th>
+                            <th class="p-2 border">ช้อนส้อมพลาสติก</th>
+                            <th class="p-2 border">ภาชนะเยื่อพืช</th>
+                            <th class="p-2 border">เศษอาหาร</th>
+                            <th class="p-2 border">น้ำเสีย</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="font-semibold text-center day1-bg">2026-09-05 (วันที่ 1)</td>
+                            <td>227</td><td>83</td><td>34</td><td>25</td><td>11</td>
+                            <td class="font-bold text-red-600">943</td><td>54</td><td>45</td><td>22</td><td class="font-bold text-red-600">836</td><td class="font-bold text-red-600">2,149</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="font-semibold text-center day2-bg">2026-09-06 (วันที่ 2)</td>
+                            <td>167</td><td>58</td><td>47</td><td>20</td><td>44</td>
+                            <td class="font-bold text-red-600">735</td><td>38</td><td>39</td><td>19</td><td class="font-bold text-red-600">618</td><td class="font-bold text-red-600">1,304</td>
+                        </tr>
+                        <tr class="bg-gray-100 font-bold text-gray-800">
+                            <td class="text-right pr-4 text-base">Grand Total</td>
+                            <td class="text-blue-700">393</td>
+                            <td class="text-blue-700">141</td>
+                            <td class="text-blue-700">81</td>
+                            <td class="text-blue-700">46</td>
+                            <td class="text-blue-700">55</td>
+                            <td class="text-red-700 text-base">1,677</td>
+                            <td class="text-blue-700">92</td>
+                            <td class="text-blue-700">83</td>
+                            <td class="text-blue-700">41</td>
+                            <td class="text-red-700 text-base">1,454</td>
+                            <td class="text-red-700 text-base">3,453</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Charts Section 2 (Breakdown Data) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <!-- Chart 3: Detailed Breakdown Bar Chart -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-4 text-center">สัดส่วนประเภทขยะ วันที่ 1 vs วันที่ 2 (ปี 2026)</h2>
+                <canvas id="breakdownBarChart" height="250"></canvas>
+            </div>
+
+            <!-- Chart 4: Grand Total Donut Chart -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-4 text-center">สัดส่วนปริมาณขยะรวมทั้งหมดตามประเภท (ปี 2026)</h2>
+                <div class="flex justify-center">
+                    <!-- Adjusted max height for doughnut chart so it fits well -->
+                    <div style="max-height: 350px; width: 100%; display: flex; justify-content: center;">
+                        <canvas id="breakdownPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts for Charts -->
+    <script>
+        /* === Section 1 Charts (Overall Trends) === */
+        const years = ['2024', '2025', '2026'];
+        const totalWaste = [13690, 10255, 16966]; 
+        const totalAttendees = [48798, 37558, 35230]; 
+
+        // 1. Trend Chart
+        const ctxTrend = document.getElementById('trendChart').getContext('2d');
+        new Chart(ctxTrend, {
+            type: 'bar',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'ปริมาณขยะรวม 2 วัน',
+                        data: totalWaste,
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(37, 99, 235, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'จำนวนคนเข้างานรวม',
+                        data: totalAttendees,
+                        type: 'line',
+                        backgroundColor: 'rgba(249, 115, 22, 1)',
+                        borderColor: 'rgba(249, 115, 22, 1)',
+                        borderWidth: 3,
+                        pointRadius: 5,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'ปริมาณขยะ' } },
+                    y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'จำนวนคน' }, grid: { drawOnChartArea: false } }
+                }
+            }
+        });
+
+        // 2. Unknown Waste Chart
+        const ctxUnknown = document.getElementById('unknownWasteChart').getContext('2d');
+        new Chart(ctxUnknown, {
+            type: 'bar',
+            data: {
+                labels: ['ปี 2025', 'ปี 2026'],
+                datasets: [
+                    { label: 'วันที่ 1', data: [917, 2435], backgroundColor: 'rgba(239, 68, 68, 0.6)' },
+                    { label: 'วันที่ 2', data: [650, 4814], backgroundColor: 'rgba(185, 28, 28, 0.9)' }
+                ]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'top' } } }
+        });
+
+
+        /* === Section 2 Charts (Detailed Breakdown 2026) === */
+        const wasteLabels = ['PET', 'แก้ว/กระป๋อง', 'หลอด', 'ฝาขวด', 'กระดาษ/อื่นๆ', 'ภาชนะพลาสติก', 'ไม้เสียบ', 'ช้อนส้อม', 'ภาชนะเยื่อพืช', 'เศษอาหาร', 'น้ำเสีย'];
+        const day1Waste = [227, 83, 34, 25, 11, 943, 54, 45, 22, 836, 2149];
+        const day2Waste = [167, 58, 47, 20, 44, 735, 38, 39, 19, 618, 1304];
+        const grandTotalWaste = [393, 141, 81, 46, 55, 1677, 92, 83, 41, 1454, 3453];
+
+        // 3. Breakdown Bar Chart (Stacked)
+        const ctxBreakdownBar = document.getElementById('breakdownBarChart').getContext('2d');
+        new Chart(ctxBreakdownBar, {
+            type: 'bar',
+            data: {
+                labels: wasteLabels,
+                datasets: [
+                    { label: 'วันที่ 1 (2026-09-05)', data: day1Waste, backgroundColor: 'rgba(16, 185, 129, 0.7)' }, // Emerald
+                    { label: 'วันที่ 2 (2026-09-06)', data: day2Waste, backgroundColor: 'rgba(139, 92, 246, 0.7)' }  // Violet
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, beginAtZero: true }
+                },
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+
+        // 4. Breakdown Doughnut Chart (Grand Total)
+        const ctxBreakdownPie = document.getElementById('breakdownPieChart').getContext('2d');
+        new Chart(ctxBreakdownPie, {
+            type: 'doughnut',
+            data: {
+                labels: wasteLabels,
+                datasets: [{
+                    data: grandTotalWaste,
+                    backgroundColor: [
+                        '#3b82f6', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', 
+                        '#ef4444', // ภาชนะพลาสติก (Highlight แดงเพราะเยอะ)
+                        '#eab308', '#84cc16', '#22c55e', 
+                        '#d946ef', // เศษอาหาร
+                        '#1e3a8a'  // น้ำเสีย (Highlight น้ำเงินเข้มเพราะเยอะที่สุด)
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { boxWidth: 12, font: { size: 11 } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
