@@ -3,315 +3,490 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>รายงานปริมาณขยะ Mahidol Open House</title>
-    <!-- Tailwind CSS สำหรับการจัดการ Layout และความสวยงาม -->
+    <title>Executive Dashboard: วิเคราะห์การจัดการขยะ Mahidol Open House</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js สำหรับวาดกราฟ -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Prompt', sans-serif; background-color: #f3f4f6; }
-        .table-header { background-color: #e5e7eb; font-weight: 600; text-align: center; }
+        body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; }
+        .glass-card { background: rgba(255, 255, 255, 0.98); border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .gradient-text { background: linear-gradient(90deg, #1e3a8a, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .custom-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        /* Optimized Table Styles */
+        .t-center th, .t-center td { text-align: center; vertical-align: middle; padding: 0.75rem; }
+        .c-ww { color: #2563eb; font-weight: bold; background-color: #eff6ff; }
+        .c-dg { color: #e11d48; font-weight: 500; background-color: #fff1f2; }
+        .c-eg { color: #d97706; font-weight: 500; background-color: #fefce8; }
+        .c-re { color: #047857; }
+        .c-to { font-weight: bold; color: #1e40af; background-color: #dbeafe; }
+        .badge-green { background: #d1fae5; color: #047857; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-weight: bold; font-size: 0.75rem; }
+        .badge-yellow { background: #fef3c7; color: #b45309; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-weight: bold; font-size: 0.75rem; }
+        .badge-red { background: #ffe4e6; color: #e11d48; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-weight: bold; font-size: 0.75rem; border: 1px solid #fecdd3; }
+        .row-hover:hover { background-color: #f8fafc; }
+        .table-bg-1 { background-color: #dcfce7; }
+        .table-bg-2 { background-color: #e0e7ff; }
         .day1-bg { background-color: #d1fae5; }
         .day2-bg { background-color: #ede9fe; }
-        th, td { border: 1px solid #d1d5db; padding: 0.75rem; text-align: center; vertical-align: middle; }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-slate-800 antialiased">
 
-    <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="bg-gradient-to-br from-slate-900 via-blue-900 to-teal-900 text-white pb-28 pt-10 px-6 shadow-lg">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div>
+                <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold px-3 py-1 rounded-full uppercase mb-4 inline-block">Official Executive Report</span>
+                <h1 class="text-4xl md:text-5xl font-bold mb-2 leading-tight">รายงานวิเคราะห์การจัดการขยะ</h1>
+                <h2 class="text-xl text-blue-200 font-medium mb-2">โครงการ Mahidol Open House (2024 - 2026)</h2>
+                <p class="text-sm text-teal-100 opacity-80">จัดทำโดย: กองกายภาพและสิ่งแวดล้อม มหาวิทยาลัยมหิดล</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="max-w-7xl mx-auto px-4 -mt-20 relative z-10 mb-20">
         
-        <!-- Header -->
-        <header class="mb-10 text-center">
-            <h1 class="text-4xl font-bold text-blue-900 mb-2">สรุปปริมาณขยะ Mahidol Open House</h1>
-            <p class="text-lg text-gray-600">ข้อมูลเปรียบเทียบปี 2024 - 2026 และรายละเอียดขยะปีล่าสุด</p>
-        </header>
-
-        <!-- Key Insights Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
-                <h3 class="text-sm font-semibold text-gray-500 mb-1">ยอดคนเข้างานรวมปีล่าสุด (2026)</h3>
-                <p class="text-3xl font-bold text-gray-800">35,230 <span class="text-sm font-normal text-red-500">▼ ลดลงจากปีก่อน</span></p>
+        <!-- KPIs -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-10">
+            <div class="glass-card rounded-2xl p-6 border-t-4 border-t-blue-500">
+                <h3 class="text-sm font-semibold text-slate-500 mb-1">ผู้เข้าร่วมงานรวม</h3>
+                <p class="text-3xl font-bold text-slate-800">35,230 <span class="text-base font-medium text-slate-400">คน</span></p>
+                <p class="text-sm text-emerald-600 mt-2 font-medium bg-emerald-50 inline-block px-2 py-1 rounded">▼ ลดลง 6% (จากปี 2025)</p>
             </div>
-            <div class="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500">
-                <h3 class="text-sm font-semibold text-gray-500 mb-1">ปริมาณขยะรวมปีล่าสุด (2026)</h3>
-                <p class="text-3xl font-bold text-gray-800">16,966 <span class="text-sm font-normal text-red-500">▲ เพิ่มขึ้นอย่างมาก</span></p>
+            <div class="glass-card rounded-2xl p-6 border-t-4 border-t-rose-500">
+                <h3 class="text-sm font-semibold text-slate-500 mb-1">ปริมาณขยะรวม</h3>
+                <p class="text-3xl font-bold text-rose-600">16,966 <span class="text-base font-medium text-slate-400">กก.</span></p>
+                <p class="text-sm text-rose-600 mt-2 font-medium bg-rose-50 inline-block px-2 py-1 rounded">▲ เพิ่มขึ้น (65%)</p>
             </div>
-            <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
-                <h3 class="text-sm font-semibold text-gray-500 mb-1">ขยะที่ไม่ทราบที่มาที่ไป (2026)</h3>
-                <p class="text-3xl font-bold text-red-600">7,249 <span class="text-sm font-normal text-gray-500">ชิ้น/หน่วย</span></p>
-                <p class="text-xs text-gray-500 mt-1">*เป็นประเด็นที่ต้องเฝ้าระวังสูงสุด</p>
+            <div class="glass-card rounded-2xl p-6 border-t-4 border-t-amber-500">
+                <h3 class="text-sm font-semibold text-slate-500 mb-1">อัตราขยะต่อหัว (Kg/Person)</h3>
+                <p class="text-3xl font-bold text-amber-500">0.48 <span class="text-base font-medium text-slate-400">กก./คน</span></p>
+                <p class="text-sm text-amber-600 mt-2 font-medium bg-amber-50 inline-block px-2 py-1 rounded">▲ เพิ่มจาก 0.27 กก. ปีก่อน</p>
             </div>
-        </div>
-
-        <!-- 1. ภาพรวมขยะ 2024-2026 (ตารางแรก) -->
-        <div class="bg-white rounded-lg shadow overflow-hidden mb-10">
-            <div class="p-6 border-b border-gray-200">
-                <h2 class="text-xl font-bold text-gray-800">ภาพรวมปริมาณขยะ (ปี 2024 - 2026)</h2>
-            </div>
-            <div class="overflow-x-auto p-4">
-                <table class="w-full text-sm whitespace-nowrap">
-                    <thead>
-                        <tr>
-                            <th rowspan="2" class="bg-gray-100">วันที่ / ปี</th>
-                            <th colspan="6" class="day1-bg">ข้อมูลวันที่ 1</th>
-                            <th colspan="6" class="day2-bg">ข้อมูลวันที่ 2</th>
-                            <th rowspan="2" class="bg-blue-200 text-blue-900 font-bold text-base">รวมปริมาณ<br>ขยะ 2 วัน</th>
-                        </tr>
-                        <tr>
-                            <th class="day1-bg">วันที่ 1<br>(รวม)</th>
-                            <th class="day1-bg">ปริมาณที่บันทึกได้<br>จากส่วนงาน</th>
-                            <th class="day1-bg">ไม่ทราบ<br>ที่มาที่ไป</th>
-                            <th class="day1-bg">ขยะที่ทำ<br>ประโยชน์</th>
-                            <th class="day1-bg font-bold">รวมขยะ<br>ทั้งหมด</th>
-                            <th class="day1-bg font-bold text-blue-700">คนเข้างาน</th>
-                            <th class="day2-bg">วันที่ 2<br>(รวม)</th>
-                            <th class="day2-bg">ปริมาณที่บันทึกได้<br>จากส่วนงาน</th>
-                            <th class="day2-bg">ไม่ทราบ<br>ที่มาที่ไป</th>
-                            <th class="day2-bg">ขยะที่ทำ<br>ประโยชน์</th>
-                            <th class="day2-bg font-bold">รวมขยะ<br>ทั้งหมด</th>
-                            <th class="day2-bg font-bold text-blue-700">คนเข้างาน</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="font-semibold text-center bg-white">2024<br><span class="text-xs font-normal text-gray-500">(7-8/09/67)</span></td>
-                            <td class="bg-orange-100">5,180</td>
-                            <td class="day1-bg text-gray-400">-</td><td class="day1-bg text-gray-400">-</td><td class="bg-orange-100 text-gray-400">-</td>
-                            <td class="day1-bg font-semibold">5,180</td><td class="day1-bg font-semibold text-blue-600">31,914</td>
-                            <td class="bg-orange-100">8,510</td>
-                            <td class="day2-bg text-gray-400">-</td><td class="day2-bg text-gray-400">-</td><td class="bg-orange-100 text-gray-400">-</td>
-                            <td class="day2-bg font-semibold">8,510</td><td class="day2-bg font-semibold text-blue-600">16,884</td>
-                            <td class="bg-blue-100 font-bold text-lg text-blue-900">13,690</td>
-                        </tr>
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="font-semibold text-center bg-white">2025<br><span class="text-xs font-normal text-gray-500">(6-7/09/68)</span></td>
-                            <td class="bg-orange-100">3,540</td>
-                            <td class="day1-bg">2,623</td><td class="day1-bg text-red-600 font-bold">917</td><td class="bg-orange-100">1,915</td>
-                            <td class="day1-bg font-semibold">5,455</td><td class="day1-bg font-semibold text-blue-600">26,221</td>
-                            <td class="bg-orange-100">3,300</td>
-                            <td class="day2-bg">2,650</td><td class="day2-bg text-red-600 font-bold">650</td><td class="bg-orange-100">1,500</td>
-                            <td class="day2-bg font-semibold">4,800</td><td class="day2-bg font-semibold text-blue-600">11,337</td>
-                            <td class="bg-blue-100 font-bold text-lg text-blue-900">10,255</td>
-                        </tr>
-                        <tr class="hover:bg-gray-50 transition bg-yellow-50">
-                            <td class="font-semibold text-center bg-white">2026<br><span class="text-xs font-normal text-gray-500">(5-6/09/69)</span></td>
-                            <td class="bg-orange-100">3,670</td>
-                            <td class="day1-bg">1,235</td><td class="day1-bg text-red-600 font-bold">2,435</td><td class="bg-orange-100">4,328</td>
-                            <td class="day1-bg font-semibold">7,998</td><td class="day1-bg font-semibold text-blue-600">25,636</td>
-                            <td class="bg-orange-100">5,860</td>
-                            <td class="day2-bg">1,046</td><td class="day2-bg text-red-600 font-bold">4,814</td><td class="bg-orange-100">3,108</td>
-                            <td class="day2-bg font-semibold">8,968</td><td class="day2-bg font-semibold text-blue-600">9,594</td>
-                            <td class="bg-blue-100 font-bold text-lg text-blue-900">16,966</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="glass-card rounded-2xl p-6 border-t-4 border-t-purple-500">
+                <h3 class="text-sm font-semibold text-slate-500 mb-1">ขยะฝังกลบ "ไม่ทราบที่มา"</h3>
+                <p class="text-3xl font-bold text-purple-600">7,249 <span class="text-base font-medium text-slate-400">กก.</span></p>
+                <p class="text-sm text-purple-600 mt-2 font-medium bg-purple-50 inline-block px-2 py-1 rounded">คิดเป็น 76% ของขยะฝังกลบทั้งหมด</p>
             </div>
         </div>
 
-        <!-- Charts Section 1 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="text-lg font-bold text-gray-800 mb-4 text-center">แนวโน้มปริมาณขยะรวม (2 วัน) เทียบกับผู้เข้างาน</h2>
-                <canvas id="trendChart" height="250"></canvas>
-            </div>
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="text-lg font-bold text-gray-800 mb-4 text-center">สัดส่วนขยะที่ไม่ทราบที่มาที่ไป (ปี 2025 vs 2026)</h2>
-                <canvas id="unknownWasteChart" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- 2. ตารางรายละเอียดประเภทขยะปี 2026 (ตารางใหม่) -->
-        <div class="bg-white rounded-lg shadow overflow-hidden mb-10 border-t-4 border-indigo-500">
-            <div class="p-6 border-b border-gray-200">
-                <h2 class="text-xl font-bold text-gray-800">รายละเอียดประเภทขยะ แยกรายวัน ประจำปี 2026</h2>
-                <p class="text-sm text-gray-500 mt-1">ข้อมูลวันที่ 5 และ 6 กันยายน 2569</p>
-            </div>
-            <div class="overflow-x-auto p-4">
-                <table class="w-full text-sm whitespace-nowrap">
-                    <thead>
-                        <tr class="bg-indigo-100 text-indigo-900">
-                            <th class="p-2 border font-bold">วันที่จัดกิจกรรม</th>
-                            <th class="p-2 border">PET</th>
-                            <th class="p-2 border">แก้ว/กระป๋อง</th>
-                            <th class="p-2 border">หลอด</th>
-                            <th class="p-2 border">ฝาขวด</th>
-                            <th class="p-2 border">กระดาษ/อื่นๆ</th>
-                            <th class="p-2 border">ภาชนะพลาสติก</th>
-                            <th class="p-2 border">ไม้เสียบ</th>
-                            <th class="p-2 border">ช้อนส้อมพลาสติก</th>
-                            <th class="p-2 border">ภาชนะเยื่อพืช</th>
-                            <th class="p-2 border">เศษอาหาร</th>
-                            <th class="p-2 border">น้ำเสีย</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="font-semibold text-center day1-bg">2026-09-05 (วันที่ 1)</td>
-                            <td>227</td><td>83</td><td>34</td><td>25</td><td>11</td>
-                            <td class="font-bold text-red-600">943</td><td>54</td><td>45</td><td>22</td><td class="font-bold text-red-600">836</td><td class="font-bold text-red-600">2,149</td>
-                        </tr>
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="font-semibold text-center day2-bg">2026-09-06 (วันที่ 2)</td>
-                            <td>167</td><td>58</td><td>47</td><td>20</td><td>44</td>
-                            <td class="font-bold text-red-600">735</td><td>38</td><td>39</td><td>19</td><td class="font-bold text-red-600">618</td><td class="font-bold text-red-600">1,304</td>
-                        </tr>
-                        <tr class="bg-gray-100 font-bold text-gray-800">
-                            <td class="text-right pr-4 text-base">Grand Total</td>
-                            <td class="text-blue-700">393</td>
-                            <td class="text-blue-700">141</td>
-                            <td class="text-blue-700">81</td>
-                            <td class="text-blue-700">46</td>
-                            <td class="text-blue-700">55</td>
-                            <td class="text-red-700 text-base">1,677</td>
-                            <td class="text-blue-700">92</td>
-                            <td class="text-blue-700">83</td>
-                            <td class="text-blue-700">41</td>
-                            <td class="text-red-700 text-base">1,454</td>
-                            <td class="text-red-700 text-base">3,453</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <!-- Executive Summary Findings -->
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-6 mb-10 shadow-sm">
+            <h2 class="text-lg font-bold text-blue-900 mb-3 flex items-center gap-2">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
+                ข้อค้นพบสำคัญ (Key Executive Insights)
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-1">1. วิกฤตส่วนต่างขยะ 7.2 ตัน</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">ปริมาณขยะที่ต้องนำไปฝังกลบจริงสูงกว่าที่บันทึกได้ เกิดจากจุดคัดแยกไม่ครอบคลุมเวลาและสถานที่ รวมถึงความจำเป็นในการสนับสนุนและจัดระเบียบร้านค้าในช่วงเก็บร้านให้รัดกุมขึ้น</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-1">2. ภาพลวงตาบรรจุภัณฑ์รักษ์โลก</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">ภาชนะเยื่อพืชถูกใช้งานจริงเพียง 41 กก. (<1%) ในขณะที่ขยะที่ต้องนำไปเป็นพลังงาน (พลาสติก) และขยะที่ต้องกำจัดทั่วไปมีสัดส่วนรวมกันสูงถึง 44%</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-1">3. โอกาสในการพัฒนาประสิทธิภาพรายพื้นที่</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">บางพื้นที่มีสัดส่วนขยะฝังกลบสูงกว่าเกณฑ์เฉลี่ย สะท้อนถึงโอกาสที่ส่วนกลางจะเข้าไปร่วมมือและให้การสนับสนุนอุปกรณ์หรือจุดคัดแยกเพิ่มเติม เพื่ออำนวยความสะดวกให้ผู้ใช้งานและผู้จัดงาน</p>
+                </div>
             </div>
         </div>
 
-        <!-- Charts Section 2 (Breakdown Data) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-            <!-- Chart 3: Detailed Breakdown Bar Chart -->
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="text-lg font-bold text-gray-800 mb-4 text-center">สัดส่วนประเภทขยะ วันที่ 1 vs วันที่ 2 (ปี 2026)</h2>
-                <canvas id="breakdownBarChart" height="250"></canvas>
-            </div>
-
-            <!-- Chart 4: Grand Total Donut Chart -->
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="text-lg font-bold text-gray-800 mb-4 text-center">สัดส่วนปริมาณขยะรวมทั้งหมดตามประเภท (ปี 2026)</h2>
-                <div class="flex justify-center">
-                    <!-- Adjusted max height for doughnut chart so it fits well -->
-                    <div style="max-height: 350px; width: 100%; display: flex; justify-content: center;">
-                        <canvas id="breakdownPieChart"></canvas>
+        <!-- Section 1 -->
+        <div class="mb-14">
+            <h2 class="text-2xl font-bold text-slate-800 mb-4 gradient-text">ส่วนที่ 1: ภาพรวมแนวโน้ม 3 ปีย้อนหลัง</h2>
+            
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm mb-6 flex flex-col md:flex-row gap-6 items-center">
+                <div class="flex-1">
+                    <h4 class="font-bold text-indigo-800 text-lg mb-2">💡 โครงสร้างที่มาของขยะ (Waste Flow)</h4>
+                    <p class="text-slate-600 text-sm mb-4">ขยะที่เทศบาลเก็บไปกำจัดจริง มีปริมาณสูงกว่าที่หน่วยงานภายในบันทึกได้ เกิดเป็น <strong>"ขยะส่วนต่างที่ไม่ทราบที่มา"</strong> โดยเฉพาะในช่วงเก็บร้านวันที่ 2 ซึ่งวิเคราะห์พบ 4 สาเหตุเชิงโครงสร้างที่สามารถร่วมกันแก้ไขได้ คือ การกำกับดูแลร้านค้า, การคัดแยกขยะรื้อถอน, การกระจายจุดทิ้ง และช่วงเวลาให้บริการจุดคัดแยก</p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div class="flex items-center justify-between text-sm font-semibold mb-2">
+                            <span class="text-rose-700">ขยะฝังกลบเทศบาล (9,530 กก.)</span>
+                            <span>=</span>
+                            <span class="text-amber-600">บันทึกจากส่วนงาน (2,281 กก.)</span>
+                            <span>+</span>
+                            <span class="text-purple-600">ไม่ทราบที่มา (7,249 กก.)</span>
+                        </div>
+                        <div class="w-full bg-rose-100 rounded-full h-3 flex overflow-hidden">
+                            <div class="bg-amber-400 h-3" style="width: 24%"></div>
+                            <div class="bg-purple-500 h-3" style="width: 76%"></div>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Table 3 years -->
+            <div class="glass-card rounded-2xl overflow-hidden shadow-md mb-6">
+                <div class="p-4 bg-slate-50 border-b border-slate-200">
+                    <h3 class="font-bold text-slate-800 text-lg">ตารางข้อมูลปริมาณขยะย้อนหลัง 3 ปี (ปี 2024 - 2026)</h3>
+                </div>
+                <div class="overflow-x-auto p-1 max-h-[500px] custom-scroll">
+                    <table class="w-full text-xs whitespace-nowrap t-center">
+                        <thead class="sticky top-0 z-20 text-slate-700 bg-white shadow-sm">
+                            <tr>
+                                <th rowspan="2" class="border-b-2 border-slate-200 bg-slate-100 z-30 sticky left-0">วันที่ / ปี</th>
+                                <th colspan="6" class="day1-bg border-b-2 border-emerald-200 text-emerald-900">ข้อมูลวันที่ 1 (กก.)</th>
+                                <th colspan="6" class="day2-bg border-b-2 border-indigo-200 text-indigo-900">ข้อมูลวันที่ 2 (กก.)</th>
+                                <th rowspan="2" class="bg-blue-100 text-blue-900 border-b-2 border-blue-200 font-bold text-sm">รวมปริมาณ<br>ขยะ 2 วัน</th>
+                            </tr>
+                            <tr>
+                                <th class="day1-bg font-semibold border-r border-emerald-200/50">ฝังกลบจาก<br>เทศบาล</th>
+                                <th class="day1-bg text-slate-600">ฝังกลบบันทึก<br>จากส่วนงาน</th>
+                                <th class="day1-bg text-rose-600 font-bold">ฝังกลบ<br>ไม่ทราบที่มา</th>
+                                <th class="day1-bg text-emerald-700">ขยะที่ทำ<br>ประโยชน์</th>
+                                <th class="day1-bg font-bold text-slate-800">รวมขยะ<br>ทั้งหมด</th>
+                                <th class="day1-bg font-bold text-blue-700 border-r border-emerald-200/50">คนเข้างาน</th>
+                                
+                                <th class="day2-bg font-semibold border-r border-indigo-200/50">ฝังกลบจาก<br>เทศบาล</th>
+                                <th class="day2-bg text-slate-600">ฝังกลบบันทึก<br>จากส่วนงาน</th>
+                                <th class="day2-bg text-rose-600 font-bold">ฝังกลบ<br>ไม่ทราบที่มา</th>
+                                <th class="day2-bg text-indigo-700">ขยะที่ทำ<br>ประโยชน์</th>
+                                <th class="day2-bg font-bold text-slate-800">รวมขยะ<br>ทั้งหมด</th>
+                                <th class="day2-bg font-bold text-blue-700">คนเข้างาน</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-700">
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold bg-white sticky left-0 shadow-[1px_0_3px_rgba(0,0,0,0.05)]">2024<br><span class="text-[10px] font-normal text-slate-400">(7-8/09/67)</span></td>
+                                <td class="font-bold text-emerald-900 bg-emerald-50/30">5,180</td><td class="text-slate-400">-</td><td class="text-slate-400">-</td><td class="text-slate-400">-</td><td class="font-bold text-slate-800 bg-emerald-50/50">5,180</td><td class="text-blue-600 font-semibold border-r border-slate-200">31,914</td>
+                                <td class="font-bold text-indigo-900 bg-indigo-50/30">8,510</td><td class="text-slate-400">-</td><td class="text-slate-400">-</td><td class="text-slate-400">-</td><td class="font-bold text-slate-800 bg-indigo-50/50">8,510</td><td class="text-blue-600 font-semibold border-r border-slate-200">16,884</td>
+                                <td class="font-bold text-blue-800 bg-blue-50 text-base">13,690</td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold bg-white sticky left-0 shadow-[1px_0_3px_rgba(0,0,0,0.05)]">2025<br><span class="text-[10px] font-normal text-slate-400">(6-7/09/68)</span></td>
+                                <td class="font-bold text-emerald-900 bg-emerald-50/30">3,540</td><td>2,623</td><td class="text-rose-500 font-bold bg-rose-50/50">917</td><td class="text-emerald-700">1,915</td><td class="font-bold text-slate-800 bg-emerald-50/50">5,455</td><td class="text-blue-600 font-semibold border-r border-slate-200">26,221</td>
+                                <td class="font-bold text-indigo-900 bg-indigo-50/30">3,300</td><td>2,650</td><td class="text-rose-500 font-bold bg-rose-50/50">650</td><td class="text-indigo-700">1,500</td><td class="font-bold text-slate-800 bg-indigo-50/50">4,800</td><td class="text-blue-600 font-semibold border-r border-slate-200">11,337</td>
+                                <td class="font-bold text-blue-800 bg-blue-50 text-base">10,255</td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/20">
+                                <td class="font-bold text-amber-900 bg-white sticky left-0 shadow-[1px_0_3px_rgba(0,0,0,0.05)]">2026<br><span class="text-[10px] font-normal text-slate-500">(5-6/09/69)</span></td>
+                                <td class="font-bold text-emerald-900 bg-emerald-100/40">3,670</td><td>1,235</td><td class="text-rose-600 font-bold bg-rose-100/50">2,435</td><td class="text-emerald-700 font-semibold">4,328</td><td class="font-bold text-slate-800 bg-emerald-100/50">7,998</td><td class="text-blue-700 font-bold border-r border-slate-200">25,636</td>
+                                <td class="font-bold text-indigo-900 bg-indigo-100/40">5,860</td><td>1,046</td><td class="text-rose-600 font-bold bg-rose-100/50">4,814</td><td class="text-indigo-700 font-semibold">3,108</td><td class="font-bold text-slate-800 bg-indigo-100/50">8,968</td><td class="text-blue-700 font-bold border-r border-slate-200">9,594</td>
+                                <td class="font-bold text-blue-900 bg-blue-100 text-lg">16,966</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-card rounded-xl p-5"><h3 class="text-center font-bold text-slate-700 mb-4">ปริมาณขยะสวนทางยอดคนเข้างาน</h3><canvas id="trendChart" height="230"></canvas></div>
+                <div class="glass-card rounded-xl p-5"><h3 class="text-center font-bold text-slate-700 mb-4">สัดส่วนขยะฝังกลบ "ไม่ทราบที่มา" พุ่งสูง</h3><canvas id="unknownWasteChart" height="230"></canvas></div>
+            </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="mb-14">
+            <h2 class="text-2xl font-bold text-slate-800 mb-4 gradient-text">ส่วนที่ 2: เจาะลึกโครงสร้างประเภทขยะ (ปี 2026)</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass-card rounded-xl p-5 lg:col-span-2">
+                    <h3 class="text-center font-bold text-slate-700 mb-4">องค์ประกอบขยะเรียงตามน้ำหนัก (กก.)</h3>
+                    <canvas id="breakdownBarChart" height="200"></canvas>
+                </div>
+                <div class="glass-card rounded-xl p-5 flex flex-col justify-center items-center">
+                    <h3 class="text-center font-bold text-slate-700 mb-4">สัดส่วนประเภทขยะภาพรวม</h3>
+                    <div class="w-full max-w-[240px]"><canvas id="breakdownPieChart" height="240"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="mb-14">
+            <h2 class="text-2xl font-bold text-slate-800 mb-4 gradient-text">ส่วนที่ 3: ประสิทธิภาพการคัดแยกขยะรายส่วนงาน (23 พื้นที่)</h2>
+            <div class="bg-white border-l-4 border-blue-500 p-5 rounded-xl shadow-sm mb-6">
+                <h4 class="font-bold text-blue-800 text-lg mb-1">🔍 ข้อมูลเพื่อการสนับสนุนและร่วมมือพัฒนาระบบคัดแยก</h4>
+                <p class="text-slate-600 text-sm">ตารางประเมินผลนี้จัดทำขึ้นเพื่อวิเคราะห์ภาพรวมและทำความเข้าใจข้อจำกัดของแต่ละพื้นที่ โดยเฉพาะจุดที่มีสัดส่วนขยะฝังกลบสูง หรือพื้นที่ที่ข้อมูลการจัดเก็บอาจยังไม่สมบูรณ์ เพื่อให้ส่วนกลางสามารถเข้าไป <strong>ให้การสนับสนุนอุปกรณ์ อำนวยความสะดวก และร่วมมือกันแก้ไขปัญหา</strong> ให้ทุกส่วนงานสามารถจัดการขยะได้ง่ายและมีประสิทธิภาพมากขึ้นในปีถัดไป</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div class="glass-card rounded-xl p-5"><h3 class="text-center font-bold text-slate-700 mb-4">Top 5 ส่วนงานที่ขยะรวมสูงสุด (กก.)</h3><canvas id="topDeptChart" height="220"></canvas></div>
+                <div class="glass-card rounded-xl p-5"><h3 class="text-center font-bold text-slate-700 mb-4">สัดส่วน รีไซเคิล vs ฝังกลบ (Top 5)</h3><canvas id="efficiencyChart" height="220"></canvas></div>
+            </div>
+
+            <!-- Optimized Performance Matrix Table -->
+            <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 shadow-md">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center flex-wrap gap-4">
+                    <h3 class="font-bold text-slate-800 text-lg">รายละเอียดประเภทขยะ และอัตราส่วนประสิทธิภาพ (23 พื้นที่)</h3>
+                </div>
+                <div class="overflow-x-auto max-h-[600px] custom-scroll">
+                    <table class="w-full text-xs whitespace-nowrap t-center">
+                        <thead class="sticky top-0 bg-white shadow-sm z-20 text-slate-700">
+                            <tr class="border-b-2 border-slate-200">
+                                <th rowspan="2" class="bg-white">#</th>
+                                <th rowspan="2" class="text-left sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)]">ส่วนงาน/คณะ</th>
+                                <th rowspan="2" class="bg-blue-50 text-blue-800">น้ำเสีย</th>
+                                <th colspan="2" class="bg-rose-50 text-rose-800">ขยะต้องกำจัด</th>
+                                <th colspan="3" class="bg-amber-50 text-amber-800">นำไปทำประโยชน์หลัก</th>
+                                <th colspan="7" class="bg-emerald-50 text-emerald-800">รีไซเคิลอื่นๆ / เยื่อพืช</th>
+                                <th rowspan="2" class="bg-blue-100 text-blue-900 font-bold">รวม<br>(กก.)</th>
+                                <th colspan="2" class="bg-indigo-50 text-indigo-800">ประสิทธิภาพ<br><span class="font-normal text-[10px]">(ไม่รวมน้ำเสีย)</span></th>
+                            </tr>
+                            <tr class="border-b-2 border-slate-200">
+                                <th class="bg-rose-50 text-rose-700">ทั่วไป</th><th class="bg-rose-50 text-rose-700 border-r">ติดเชื้อ</th>
+                                <th class="bg-amber-50 text-amber-700">พลังงาน</th><th class="bg-amber-50 text-amber-700">PET</th><th class="bg-amber-50 text-amber-700 border-r">เศษอาหาร</th>
+                                <th class="bg-emerald-50">แก้ว</th><th class="bg-emerald-50">หลอด</th><th class="bg-emerald-50">ฝา</th><th class="bg-emerald-50">กระดาษ</th><th class="bg-emerald-50">ไม้เสียบ</th><th class="bg-emerald-50">ช้อนส้อม</th><th class="bg-emerald-50 border-r">พืช</th>
+                                <th class="bg-indigo-50 text-emerald-700">Recycle %</th><th class="bg-indigo-50 text-rose-600">Landfill %</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-700">
+                            <tr><td colspan="18" class="bg-slate-100 text-left font-bold px-4 py-2 text-[11px] text-slate-500 uppercase tracking-wider">กลุ่มข้อมูลสมบูรณ์ (จัดอันดับตามน้ำหนักรวม)</td></tr>
+                            <!-- Data Rows -->
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold text-slate-400">1</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">ตลาดนัด-OPPE</td>
+                                <td class="c-ww">613</td><td class="c-dg">103</td><td class="c-dg border-r">0</td><td class="c-eg">219</td><td class="c-eg">44</td><td class="c-eg border-r">185</td>
+                                <td class="c-re">9</td><td class="c-re">8</td><td class="c-re">4</td><td class="c-re">0</td><td class="c-re">16</td><td class="c-re">9</td><td class="c-re font-bold border-r">1</td>
+                                <td class="c-to">1,211</td><td><span class="badge-green">82.8%</span></td><td><span class="badge-green">17.2%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold text-slate-400">2</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">คณะวิศวกรรมศาสตร์ (EG)</td>
+                                <td class="c-ww">547</td><td class="c-dg">103</td><td class="c-dg border-r">9</td><td class="c-eg">231</td><td class="c-eg">59</td><td class="c-eg border-r">138</td>
+                                <td class="c-re">16</td><td class="c-re">26</td><td class="c-re">4</td><td class="c-re">0</td><td class="c-re">17</td><td class="c-re">12</td><td class="c-re font-bold border-r">5</td>
+                                <td class="c-to">1,167</td><td><span class="badge-green">81.9%</span></td><td><span class="badge-green">18.1%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/30">
+                                <td class="font-bold text-slate-400">3</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">คณะวิทยาศาสตร์ (SC) 1</td>
+                                <td class="c-ww">229</td><td class="c-dg font-bold">331</td><td class="c-dg font-bold border-r">22</td><td class="c-eg">155</td><td class="c-eg">19</td><td class="c-eg border-r">148</td>
+                                <td class="c-re">51</td><td class="c-re">2</td><td class="c-re">5</td><td class="c-re">4</td><td class="c-re">3</td><td class="c-re">8</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">977</td><td><span class="badge-yellow">63.9%</span></td><td><span class="badge-red">36.1%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold text-slate-400">4</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">MLC-OPPE</td>
+                                <td class="c-ww">387</td><td class="c-dg">65</td><td class="c-dg border-r">38</td><td class="c-eg">218</td><td class="c-eg">40</td><td class="c-eg border-r">163</td>
+                                <td class="c-re">14</td><td class="c-re">7</td><td class="c-re">5</td><td class="c-re">8</td><td class="c-re">9</td><td class="c-re">9</td><td class="c-re font-bold border-r">2</td>
+                                <td class="c-to">965</td><td><span class="badge-green">89.3%</span></td><td><span class="badge-green">10.7%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/30">
+                                <td class="font-bold text-slate-400">5</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">อาคารสิริวิทยา (SVD)</td>
+                                <td class="c-ww">304</td><td class="c-dg">126</td><td class="c-dg border-r">74</td><td class="c-eg">194</td><td class="c-eg">44</td><td class="c-eg border-r">142</td>
+                                <td class="c-re">9</td><td class="c-re">7</td><td class="c-re">6</td><td class="c-re">28</td><td class="c-re">8</td><td class="c-re">7</td><td class="c-re font-bold border-r">15</td>
+                                <td class="c-to">964</td><td><span class="badge-yellow">79.3%</span></td><td><span class="badge-red">20.7%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/30">
+                                <td class="font-bold text-slate-400">6</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">ศูนย์บริหารสินทรัพย์ (OPAM)</td>
+                                <td class="c-ww">240</td><td class="c-dg">256</td><td class="c-dg border-r">48</td><td class="c-eg">73</td><td class="c-eg">40</td><td class="c-eg border-r">137</td>
+                                <td class="c-re">11</td><td class="c-re">5</td><td class="c-re">2</td><td class="c-re">8</td><td class="c-re">7</td><td class="c-re">8</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">835</td><td><span class="badge-yellow">63.6%</span></td><td><span class="badge-red">36.4%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold text-slate-400">7</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">วิทยาลัยดุริยางคศิลป์ (MS)</td>
+                                <td class="c-ww">195</td><td class="c-dg">76</td><td class="c-dg border-r">34</td><td class="c-eg">112</td><td class="c-eg">31</td><td class="c-eg border-r">78</td>
+                                <td class="c-re">6</td><td class="c-re">4</td><td class="c-re">5</td><td class="c-re">0</td><td class="c-re">7</td><td class="c-re">6</td><td class="c-re font-bold border-r">15</td>
+                                <td class="c-to">569</td><td><span class="badge-green">80.7%</span></td><td><span class="badge-green">19.3%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-rose-50/40">
+                                <td class="font-bold text-slate-400">8</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">สถาบันวิจัยประชากรฯ (IPSR)</td>
+                                <td class="c-ww">50</td><td class="c-dg font-bold">234</td><td class="c-dg font-bold border-r">46</td><td class="c-eg">31</td><td class="c-eg">9</td><td class="c-eg border-r">21</td>
+                                <td class="c-re">1</td><td class="c-re">1</td><td class="c-re">1</td><td class="c-re">0</td><td class="c-re">3</td><td class="c-re">1</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">398</td><td><span class="badge-yellow">29.6%</span></td><td><span class="badge-red" style="background:#e11d48; color:white;">70.4%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold text-slate-400">9</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">กองกิจการนักศึกษา (OPSA)</td>
+                                <td class="c-ww">188</td><td class="c-dg">24</td><td class="c-dg border-r">0</td><td class="c-eg">71</td><td class="c-eg">19</td><td class="c-eg border-r">64</td>
+                                <td class="c-re">2</td><td class="c-re">3</td><td class="c-re">1</td><td class="c-re">0</td><td class="c-re">3</td><td class="c-re">3</td><td class="c-re font-bold border-r">1</td>
+                                <td class="c-to">379</td><td><span class="badge-green">93.7%</span></td><td><span class="badge-green">6.3%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/30">
+                                <td class="font-bold text-slate-400">10</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">คณะสิ่งแวดล้อมฯ (EN)</td>
+                                <td class="c-ww">82</td><td class="c-dg">126</td><td class="c-dg border-r">0</td><td class="c-eg">38</td><td class="c-eg">7</td><td class="c-eg border-r">27</td>
+                                <td class="c-re">0</td><td class="c-re">1</td><td class="c-re">0</td><td class="c-re">0</td><td class="c-re">1</td><td class="c-re">2</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">284</td><td><span class="badge-yellow">55.6%</span></td><td><span class="badge-red">44.4%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/30">
+                                <td class="font-bold text-slate-400">11</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">คณะเทคนิคการแพทย์ (MT)</td>
+                                <td class="c-ww">25</td><td class="c-dg">92</td><td class="c-dg border-r">14</td><td class="c-eg">56</td><td class="c-eg">11</td><td class="c-eg border-r">39</td>
+                                <td class="c-re">2</td><td class="c-re">4</td><td class="c-re">1</td><td class="c-re">7</td><td class="c-re">3</td><td class="c-re">3</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">257</td><td><span class="badge-yellow">58.8%</span></td><td><span class="badge-red">41.2%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/30">
+                                <td class="font-bold text-slate-400">12</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">คณะสังคมศาสตร์ฯ (SH)</td>
+                                <td class="c-ww">110</td><td class="c-dg">64</td><td class="c-dg border-r">3</td><td class="c-eg">14</td><td class="c-eg">8</td><td class="c-eg border-r">16</td>
+                                <td class="c-re">1</td><td class="c-re">1</td><td class="c-re">0</td><td class="c-re">0</td><td class="c-re">0</td><td class="c-re">1</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">218</td><td><span class="badge-yellow">69.3%</span></td><td><span class="badge-red">30.7%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold text-slate-400">13</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">คณะสัตวแพทยศาสตร์ (VS)</td>
+                                <td class="c-ww">113</td><td class="c-dg">18</td><td class="c-dg border-r">0</td><td class="c-eg">34</td><td class="c-eg">9</td><td class="c-eg border-r">33</td>
+                                <td class="c-re">2</td><td class="c-re">2</td><td class="c-re">1</td><td class="c-re">0</td><td class="c-re">2</td><td class="c-re">2</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">216</td><td><span class="badge-green">91.7%</span></td><td><span class="badge-green">8.3%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/30">
+                                <td class="font-bold text-slate-400">14</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">คณะเทคโนโลยีสารสนเทศฯ (ICT)</td>
+                                <td class="c-ww">11</td><td class="c-dg">65</td><td class="c-dg border-r">10</td><td class="c-eg">59</td><td class="c-eg">11</td><td class="c-eg border-r">29</td>
+                                <td class="c-re">1</td><td class="c-re">1</td><td class="c-re">1</td><td class="c-re">0</td><td class="c-re">1</td><td class="c-re">3</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">192</td><td><span class="badge-yellow">60.9%</span></td><td><span class="badge-red">39.1%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/30">
+                                <td class="font-bold text-slate-400">15</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">กองบริหารงานทั่วไป (OPGA)</td>
+                                <td class="c-ww">0</td><td class="c-dg">21</td><td class="c-dg border-r">84</td><td class="c-eg">28</td><td class="c-eg">8</td><td class="c-eg border-r">20</td>
+                                <td class="c-re">1</td><td class="c-re">5</td><td class="c-re">4</td><td class="c-re">0</td><td class="c-re">2</td><td class="c-re">3</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">176</td><td><span class="badge-yellow">40.3%</span></td><td><span class="badge-red">59.7%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/30">
+                                <td class="font-bold text-slate-400">16</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">Bus Terminal-OPPE</td>
+                                <td class="c-ww">47</td><td class="c-dg">17</td><td class="c-dg border-r">8</td><td class="c-eg">18</td><td class="c-eg">5</td><td class="c-eg border-r">15</td>
+                                <td class="c-re">3</td><td class="c-re">1</td><td class="c-re">1</td><td class="c-re">0</td><td class="c-re">1</td><td class="c-re">1</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">117</td><td><span class="badge-yellow">64.3%</span></td><td><span class="badge-red">35.7%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold text-slate-400">17</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">คณะกายภาพบำบัด (PT) 1</td>
+                                <td class="c-ww">56</td><td class="c-dg">9</td><td class="c-dg border-r">0</td><td class="c-eg">18</td><td class="c-eg">4</td><td class="c-eg border-r">18</td>
+                                <td class="c-re">1</td><td class="c-re">1</td><td class="c-re">1</td><td class="c-re">0</td><td class="c-re">1</td><td class="c-re">1</td><td class="c-re font-bold border-r">1</td>
+                                <td class="c-to">111</td><td><span class="badge-green">91.9%</span></td><td><span class="badge-green">8.1%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold text-slate-400">18</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">วิทยาลัยนานาชาติ (IC)</td>
+                                <td class="c-ww">54</td><td class="c-dg">7</td><td class="c-dg border-r">0</td><td class="c-eg">22</td><td class="c-eg">3</td><td class="c-eg border-r">8</td>
+                                <td class="c-re">2</td><td class="c-re">1</td><td class="c-re">1</td><td class="c-re">0</td><td class="c-re">1</td><td class="c-re">1</td><td class="c-re font-bold border-r">1</td>
+                                <td class="c-to">101</td><td><span class="badge-green">93.1%</span></td><td><span class="badge-green">6.9%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100 bg-amber-50/30">
+                                <td class="font-bold text-slate-400">19</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">วิทยาลัยศาสนศึกษา (CRS)</td>
+                                <td class="c-ww">13</td><td class="c-dg">17</td><td class="c-dg border-r">9</td><td class="c-eg">27</td><td class="c-eg">5</td><td class="c-eg border-r">15</td>
+                                <td class="c-re">4</td><td class="c-re">2</td><td class="c-re">2</td><td class="c-re">0</td><td class="c-re">2</td><td class="c-re">2</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">98</td><td><span class="badge-yellow">73.5%</span></td><td><span class="badge-red">26.5%</span></td>
+                            </tr>
+                            <tr class="row-hover border-b border-slate-100">
+                                <td class="font-bold text-slate-400">20</td><td class="text-left font-bold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">บัณฑิตวิทยาลัย (GR)</td>
+                                <td class="c-ww">12</td><td class="c-dg">5</td><td class="c-dg border-r">1</td><td class="c-eg">8</td><td class="c-eg">2</td><td class="c-eg border-r">7</td>
+                                <td class="c-re">1</td><td class="c-re">0</td><td class="c-re">0</td><td class="c-re">0</td><td class="c-re">1</td><td class="c-re">1</td><td class="c-re font-bold border-r">0</td>
+                                <td class="c-to">38</td><td><span class="badge-green">84.2%</span></td><td><span class="badge-green">15.8%</span></td>
+                            </tr>
+
+                            <!-- Group 2 -->
+                            <tr><td colspan="18" class="bg-amber-50 text-left font-bold px-4 py-2 border-y border-amber-200 text-[11px] text-amber-700 uppercase tracking-wider">⚠️ กลุ่มข้อมูลรอการทบทวนความสมบูรณ์ (เพื่อการสนับสนุนร่วมกัน)</td></tr>
+                            
+                            <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                                <td class="font-bold text-amber-400">-</td>
+                                <td class="text-left font-semibold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">คณะพยาบาลศาสตร์ (NS) 1<br><span class="text-[9px] text-amber-600 font-normal">*หมายเหตุ: จัดงานแค่วันที่ 5 ก.ย.</span></td>
+                                <td class="c-ww">84</td><td class="c-dg font-bold">10</td><td class="c-dg font-bold border-r">4</td>
+                                <td class="text-slate-400">8</td><td class="text-slate-400">6</td><td class="text-slate-400 border-r">131</td>
+                                <td class="text-slate-400">2</td><td class="text-slate-400">0</td><td class="text-slate-400">0</td><td class="text-slate-400">0</td><td class="text-slate-400">3</td><td class="text-slate-400">0</td><td class="text-slate-400 border-r">0</td>
+                                <td class="font-bold text-slate-500 bg-slate-50 border-r border-slate-100">248</td>
+                                <td class="text-slate-300 text-xs">N/A</td><td class="text-slate-300 text-xs">N/A</td>
+                            </tr>
+                            <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                                <td class="font-bold text-amber-400">-</td>
+                                <td class="text-left font-semibold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">วิทยาลัยวิทยาศาสตร์ฯ กีฬา<br><span class="text-[9px] text-amber-600 font-normal">*ข้อมูลฝังกลบเป็น 0 ทั้งสองวัน</span></td>
+                                <td class="c-ww">48</td><td class="c-dg font-bold">0</td><td class="c-dg font-bold border-r">0</td>
+                                <td class="text-slate-400">32</td><td class="text-slate-400">7</td><td class="text-slate-400 border-r">11</td>
+                                <td class="text-slate-400">2</td><td class="text-slate-400">1</td><td class="text-slate-400">1</td><td class="text-slate-400">0</td><td class="text-slate-400">1</td><td class="text-slate-400">1</td><td class="text-slate-400 border-r">0</td>
+                                <td class="font-bold text-slate-500 bg-slate-50 border-r border-slate-100">104</td>
+                                <td class="text-slate-300 text-xs">N/A</td><td class="text-slate-300 text-xs">N/A</td>
+                            </tr>
+                            <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                                <td class="font-bold text-amber-400">-</td>
+                                <td class="text-left font-semibold sticky left-0 bg-white shadow-[1px_0_3px_rgba(0,0,0,0.05)] border-r border-slate-100">หอสมุดและคลังความรู้ฯ<br><span class="text-[9px] text-amber-600 font-normal">*รวมปริมาณฝังกลบไปในวันที่ 6 ก.ย.</span></td>
+                                <td class="c-ww">48</td><td class="c-dg font-bold">1</td><td class="c-dg font-bold border-r">0</td>
+                                <td class="text-slate-400">14</td><td class="text-slate-400">3</td><td class="text-slate-400 border-r">10</td>
+                                <td class="text-slate-400">1</td><td class="text-slate-400">1</td><td class="text-slate-400">1</td><td class="text-slate-400">0</td><td class="text-slate-400">1</td><td class="text-slate-400">1</td><td class="text-slate-400 border-r">0</td>
+                                <td class="font-bold text-slate-500 bg-slate-50 border-r border-slate-100">81</td>
+                                <td class="text-slate-300 text-xs">N/A</td><td class="text-slate-300 text-xs">N/A</td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="bg-slate-800 text-white sticky bottom-0 z-10 text-center">
+                            <tr>
+                                <td colspan="2" class="text-right font-bold pr-4 border-r border-slate-600">Grand Total (รวมทั้งหมด)</td>
+                                <td class="text-blue-300 font-bold border-r border-slate-600 text-base">3,453</td>
+                                <td class="text-rose-300 font-bold text-base">1,769</td><td class="text-rose-300 font-bold border-r border-slate-600 text-base">405</td>
+                                <td class="text-amber-300 font-bold text-base">1,677</td><td class="text-amber-300 font-bold text-base">393</td><td class="text-amber-300 font-bold border-r border-slate-600 text-base">1,454</td>
+                                <td class="text-emerald-300 font-bold">141</td><td class="text-emerald-300 font-bold">81</td><td class="text-emerald-300 font-bold">46</td><td class="text-emerald-300 font-bold">55</td><td class="text-emerald-300 font-bold">92</td><td class="text-emerald-300 font-bold">83</td><td class="text-emerald-300 font-bold border-r border-slate-600">41</td>
+                                <td class="font-bold text-white text-lg bg-slate-900 border-r border-slate-600">9,690</td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- Scripts for Charts -->
+    <!-- Scripts -->
     <script>
-        /* === Section 1 Charts (Overall Trends) === */
-        const years = ['2024', '2025', '2026'];
-        const totalWaste = [13690, 10255, 16966]; 
-        const totalAttendees = [48798, 37558, 35230]; 
+        Chart.defaults.font.family = "'Prompt', sans-serif";
+        Chart.defaults.color = '#64748b';
+        Chart.defaults.scale.grid.color = '#f1f5f9';
+        Chart.defaults.plugins.tooltip.padding = 10;
+        Chart.defaults.plugins.tooltip.cornerRadius = 8;
 
-        // 1. Trend Chart
-        const ctxTrend = document.getElementById('trendChart').getContext('2d');
-        new Chart(ctxTrend, {
+        // 1. Trend
+        new Chart(document.getElementById('trendChart').getContext('2d'), {
             type: 'bar',
             data: {
-                labels: years,
+                labels: ['2024', '2025', '2026'],
                 datasets: [
-                    {
-                        label: 'ปริมาณขยะรวม 2 วัน',
-                        data: totalWaste,
-                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                        borderColor: 'rgba(37, 99, 235, 1)',
-                        borderWidth: 1,
-                        yAxisID: 'y'
-                    },
-                    {
-                        label: 'จำนวนคนเข้างานรวม',
-                        data: totalAttendees,
-                        type: 'line',
-                        backgroundColor: 'rgba(249, 115, 22, 1)',
-                        borderColor: 'rgba(249, 115, 22, 1)',
-                        borderWidth: 3,
-                        pointRadius: 5,
-                        yAxisID: 'y1'
-                    }
+                    { label: 'ปริมาณขยะ (กก.)', data: [13690, 10255, 16966], backgroundColor: 'rgba(30, 58, 138, 0.85)', borderRadius: 6, yAxisID: 'y' },
+                    { label: 'ผู้เข้าชมงาน', data: [48798, 37558, 35230], type: 'line', borderColor: 'rgba(5, 150, 105, 1)', backgroundColor: 'white', borderWidth: 3, pointBackgroundColor: 'rgba(5, 150, 105, 1)', pointRadius: 6, yAxisID: 'y1' }
                 ]
             },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'ปริมาณขยะ' } },
-                    y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'จำนวนคน' }, grid: { drawOnChartArea: false } }
-                }
-            }
+            options: { responsive: true, interaction: { mode: 'index', intersect: false }, scales: { y: { position: 'left' }, y1: { position: 'right', grid: { drawOnChartArea: false } } }, plugins: { legend: { position: 'bottom'} } }
         });
 
-        // 2. Unknown Waste Chart
-        const ctxUnknown = document.getElementById('unknownWasteChart').getContext('2d');
-        new Chart(ctxUnknown, {
+        // 2. Unknown Waste
+        new Chart(document.getElementById('unknownWasteChart').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: ['ปี 2025', 'ปี 2026'],
                 datasets: [
-                    { label: 'วันที่ 1', data: [917, 2435], backgroundColor: 'rgba(239, 68, 68, 0.6)' },
-                    { label: 'วันที่ 2', data: [650, 4814], backgroundColor: 'rgba(185, 28, 28, 0.9)' }
+                    { label: 'วันที่ 1', data: [917, 2435], backgroundColor: 'rgba(203, 213, 225, 0.9)', borderRadius: 6 },
+                    { label: 'วันที่ 2', data: [650, 4814], backgroundColor: 'rgba(139, 92, 246, 0.9)', borderRadius: 6 }
                 ]
             },
-            options: { responsive: true, plugins: { legend: { position: 'top' } } }
+            options: { plugins: { legend: { position: 'bottom'} } }
         });
 
-
-        /* === Section 2 Charts (Detailed Breakdown 2026) === */
-        const wasteLabels = ['PET', 'แก้ว/กระป๋อง', 'หลอด', 'ฝาขวด', 'กระดาษ/อื่นๆ', 'ภาชนะพลาสติก', 'ไม้เสียบ', 'ช้อนส้อม', 'ภาชนะเยื่อพืช', 'เศษอาหาร', 'น้ำเสีย'];
-        const day1Waste = [227, 83, 34, 25, 11, 943, 54, 45, 22, 836, 2149];
-        const day2Waste = [167, 58, 47, 20, 44, 735, 38, 39, 19, 618, 1304];
-        const grandTotalWaste = [393, 141, 81, 46, 55, 1677, 92, 83, 41, 1454, 3453];
-
-        // 3. Breakdown Bar Chart (Stacked)
-        const ctxBreakdownBar = document.getElementById('breakdownBarChart').getContext('2d');
-        new Chart(ctxBreakdownBar, {
+        // 3. Breakdown Bar
+        new Chart(document.getElementById('breakdownBarChart').getContext('2d'), {
             type: 'bar',
             data: {
-                labels: wasteLabels,
+                labels: ['น้ำเสีย', 'ขยะทั่วไป', 'นำไปเป็นพลังงาน', 'เศษอาหาร', 'ขยะติดเชื้อ', 'PET', 'แก้ว/กระป๋อง', 'ไม้เสียบ', 'ช้อนส้อม', 'หลอด', 'กระดาษ', 'ฝาขวด', 'เยื่อพืช'],
                 datasets: [
-                    { label: 'วันที่ 1 (2026-09-05)', data: day1Waste, backgroundColor: 'rgba(16, 185, 129, 0.7)' }, // Emerald
-                    { label: 'วันที่ 2 (2026-09-06)', data: day2Waste, backgroundColor: 'rgba(139, 92, 246, 0.7)' }  // Violet
+                    { label: '5 ก.ย.', data: [2149, 900, 943, 836, 227, 227, 83, 54, 45, 34, 11, 25, 22], backgroundColor: 'rgba(16, 185, 129, 0.8)' },
+                    { label: '6 ก.ย.', data: [1304, 869, 735, 618, 177, 167, 58, 38, 39, 47, 44, 20, 19], backgroundColor: 'rgba(99, 102, 241, 0.8)' }
                 ]
             },
-            options: {
-                responsive: true,
-                scales: {
-                    x: { stacked: true },
-                    y: { stacked: true, beginAtZero: true }
-                },
-                plugins: {
-                    legend: { position: 'top' }
-                }
-            }
+            options: { scales: { x: { stacked: true }, y: { stacked: true } }, plugins: { legend: { position: 'bottom'} } }
         });
 
-        // 4. Breakdown Doughnut Chart (Grand Total)
-        const ctxBreakdownPie = document.getElementById('breakdownPieChart').getContext('2d');
-        new Chart(ctxBreakdownPie, {
+        // 4. Breakdown Pie
+        new Chart(document.getElementById('breakdownPieChart').getContext('2d'), {
             type: 'doughnut',
             data: {
-                labels: wasteLabels,
-                datasets: [{
-                    data: grandTotalWaste,
-                    backgroundColor: [
-                        '#3b82f6', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', 
-                        '#ef4444', // ภาชนะพลาสติก (Highlight แดงเพราะเยอะ)
-                        '#eab308', '#84cc16', '#22c55e', 
-                        '#d946ef', // เศษอาหาร
-                        '#1e3a8a'  // น้ำเสีย (Highlight น้ำเงินเข้มเพราะเยอะที่สุด)
-                    ],
-                    borderWidth: 1
-                }]
+                labels: ['น้ำเสีย (35.6%)', 'ทั่วไปและติดเชื้อ (22.4%)', 'พลังงาน (21.4%)', 'เศษอาหาร (15.0%)', 'อื่นๆ (5.6%)'],
+                datasets: [{ data: [3453, 2174, 2070, 1454, 539], backgroundColor: ['#1e40af', '#e11d48', '#f59e0b', '#10b981', '#94a3b8'], borderWidth: 0 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: { boxWidth: 12, font: { size: 11 } }
-                    }
-                }
-            }
+            options: { responsive: true, cutout: '60%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10 } } } }
+        });
+
+        // 5. Top Dept
+        const deptLabels = ['ตลาดนัด', 'วิศวกรรมศาสตร์', 'MLC', 'อาคารสิริวิทยา', 'วิทยาศาสตร์'];
+        new Chart(document.getElementById('topDeptChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: deptLabels,
+                datasets: [
+                    { label: '5 ก.ย.', data: [1228, 1043, 856, 613, 734], backgroundColor: 'rgba(14, 165, 233, 0.8)', borderRadius: 4 },
+                    { label: '6 ก.ย.', data: [476, 629, 583, 807, 637], backgroundColor: 'rgba(56, 189, 248, 0.5)', borderRadius: 4 }
+                ]
+            },
+            options: { plugins: { legend: { position: 'bottom'} } }
+        });
+
+        // 6. Efficiency
+        new Chart(document.getElementById('efficiencyChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: deptLabels,
+                datasets: [
+                    { label: 'รีไซเคิล', data: [1107, 1053, 862, 762, 623], backgroundColor: 'rgba(34, 197, 94, 0.85)' },
+                    { label: 'ฝังกลบ', data: [102, 112, 103, 200, 353], backgroundColor: 'rgba(244, 63, 94, 0.85)' }
+                ]
+            },
+            options: { scales: { x: { stacked: true }, y: { stacked: true } }, plugins: { legend: { position: 'bottom'} } }
         });
     </script>
 </body>
